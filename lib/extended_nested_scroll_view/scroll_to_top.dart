@@ -12,11 +12,23 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
   late final TabController primaryTC;
   final GlobalKey<ExtendedNestedScrollViewState> _key =
       GlobalKey<ExtendedNestedScrollViewState>();
+  ScrollController? innerController;
+  ScrollController outerController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     primaryTC = TabController(length: 2, vsync: this);
+
+    outerController.addListener(() {
+      print("outer: " + outerController.offset.toString());
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      innerController = _key.currentState?.innerController;
+      innerController?.addListener(() {
+        print("inner: " + innerController!.offset.toString());
+      });
+    });
   }
 
   @override
@@ -24,6 +36,10 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
     primaryTC.dispose();
     super.dispose();
   }
+
+  void innerControllerChanged() {}
+
+  void outerControllerChanged() {}
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +74,7 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
             kToolbarHeight;
     return ExtendedNestedScrollView(
       key: _key,
+      controller: outerController,
       headerSliverBuilder: (BuildContext c, bool f) {
         return <Widget>[
           SliverAppBar(
@@ -87,6 +104,10 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
             indicatorWeight: 2.0,
             isScrollable: false,
             unselectedLabelColor: Colors.grey,
+            onTap: (index) {
+              //_key.currentState?.outerController.jumpTo(200);
+              _key.currentState?.innerController.jumpTo(0);
+            },
             tabs: const <Tab>[
               Tab(text: 'Tab0'),
               Tab(text: 'Tab1'),

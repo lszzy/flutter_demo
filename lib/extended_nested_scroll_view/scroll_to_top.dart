@@ -22,11 +22,17 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
 
     outerController.addListener(() {
       print("outer: " + outerController.offset.toString());
+      if (!canScroll && innerController!.offset <= 0) {
+        outerController.jumpTo(200);
+      }
     });
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       innerController = _key.currentState?.innerController;
       innerController?.addListener(() {
         print("inner: " + innerController!.offset.toString());
+        if (!canScroll && innerController!.offset <= 0) {
+          outerController.jumpTo(200);
+        }
       });
     });
   }
@@ -41,10 +47,27 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
 
   void outerControllerChanged() {}
 
+  bool canScroll = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildScaffoldBody(),
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification notification) {
+          if (notification is ScrollStartNotification) {
+            canScroll = true;
+            if (notification.dragDetails != null) {
+              print("ScrollStartNotification");
+              canScroll = innerController!.position.pixels <= 0;
+            }
+            print("canScroll: " + canScroll.toString());
+          } else if (notification is ScrollEndNotification) {
+            print("ScrollEndNotification");
+          }
+          return false;
+        },
+        child: _buildScaffoldBody(),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.file_upload),
         onPressed: () {

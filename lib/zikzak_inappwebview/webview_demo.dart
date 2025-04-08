@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:zikzak_inappwebview/zikzak_inappwebview.dart';
 
 class WebViewDemo extends StatefulWidget {
@@ -12,6 +11,9 @@ class WebViewDemo extends StatefulWidget {
 }
 
 class _WebViewDemoState extends State<WebViewDemo> {
+  final int delay = 200;
+  final double opacity = 0.01;
+
   String? htmlData;
   Uint8List? imageData;
 
@@ -23,9 +25,7 @@ class _WebViewDemoState extends State<WebViewDemo> {
 
   void loadHtml() async {
     htmlData = await rootBundle.loadString('assets/test.html');
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      setState(() {});
-    });
+    setState(() {});
   }
 
   @override
@@ -60,7 +60,7 @@ class _WebViewDemoState extends State<WebViewDemo> {
 
   Widget _buildWebView() {
     return Opacity(
-      opacity: 0.1,
+      opacity: opacity,
       child: SizedBox(
         width: 300,
         height: 200,
@@ -72,7 +72,7 @@ class _WebViewDemoState extends State<WebViewDemo> {
           ),
           onLoadStop: (controller, url) async {
             if (imageData == null) {
-              Future.delayed(const Duration(milliseconds: 1000), () async {
+              Future.delayed(Duration(milliseconds: delay), () async {
                 imageData = await controller.takeScreenshot();
                 setState(() {});
               });

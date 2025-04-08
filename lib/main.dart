@@ -8,6 +8,7 @@ import 'package:flutter_demo/extended_nested_scroll_view/pull_to_refresh_outer.d
 import 'package:flutter_demo/extended_nested_scroll_view/scroll_to_top.dart';
 import 'package:flutter_demo/flutter_scrollview_observer/nested_scrollview_demo_page.dart';
 import 'package:flutter_demo/zikzak_inappwebview/webview_demo.dart';
+import 'package:flutter_demo/zikzak_inappwebview/webview_image_demo.dart';
 import 'package:fwdebug_flutter/fwdebug_flutter.dart';
 
 void main() {
@@ -149,6 +150,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
               child: const Text('WebViewDemo'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const WebViewImageDemo();
+                }));
+              },
+              child: const Text('WebViewImageDemo'),
             ),
           ],
         ),

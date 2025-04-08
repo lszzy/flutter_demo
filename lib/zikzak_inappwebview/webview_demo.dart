@@ -11,20 +11,18 @@ class WebViewDemo extends StatefulWidget {
 }
 
 class _WebViewDemoState extends State<WebViewDemo> {
-  final int delay = 200;
-  final double opacity = 0.01;
-
   String? htmlData;
   Uint8List? imageData;
 
   @override
   void initState() {
-    loadHtml();
+    loadHtml('Hello World');
     super.initState();
   }
 
-  void loadHtml() async {
-    htmlData = await rootBundle.loadString('assets/test.html');
+  void loadHtml(String content) async {
+    htmlData = (await rootBundle.loadString('assets/test.html'))
+        .replaceAll('{{CONTENT}}', content);
     setState(() {});
   }
 
@@ -36,49 +34,34 @@ class _WebViewDemoState extends State<WebViewDemo> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(imageData != null
-                ? '3. Image loaded'
-                : (htmlData != null ? '2. WebView loaded' : '1. Loading...')),
+            if (htmlData != null) _buildWebView(),
             const SizedBox(height: 20),
-            imageData != null
-                ? _buildImage()
-                : (htmlData != null ? _buildWebView() : _buildPlaceholder())
+            if (imageData != null) _buildImage(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPlaceholder() {
-    return const SizedBox(
+  Widget _buildWebView() {
+    return SizedBox(
       width: 300,
       height: 200,
-    );
-  }
-
-  Widget _buildWebView() {
-    return Opacity(
-      opacity: opacity,
-      child: SizedBox(
-        width: 300,
-        height: 200,
-        child: InAppWebView(
-          initialData: InAppWebViewInitialData(data: htmlData!),
-          initialSettings: InAppWebViewSettings(
-            javaScriptEnabled: true,
-            transparentBackground: true,
-          ),
-          onLoadStop: (controller, url) async {
-            if (imageData == null) {
-              Future.delayed(Duration(milliseconds: delay), () async {
-                imageData = await controller.takeScreenshot();
-                setState(() {});
-              });
-            }
-          },
+      child: InAppWebView(
+        initialData: InAppWebViewInitialData(data: htmlData!),
+        initialSettings: InAppWebViewSettings(
+          javaScriptEnabled: true,
+          transparentBackground: true,
         ),
+        onLoadStop: (controller, url) async {
+          if (imageData == null) {
+            Future.delayed(const Duration(milliseconds: 200), () async {
+              imageData = await controller.takeScreenshot();
+              setState(() {});
+            });
+          }
+        },
       ),
     );
   }

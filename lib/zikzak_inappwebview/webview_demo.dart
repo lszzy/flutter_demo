@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:zikzak_inappwebview/zikzak_inappwebview.dart';
 
 class WebViewDemo extends StatefulWidget {
@@ -22,7 +23,9 @@ class _WebViewDemoState extends State<WebViewDemo> {
 
   void loadHtml() async {
     htmlData = await rootBundle.loadString('assets/test.html');
-    setState(() {});
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {});
+    });
   }
 
   @override
@@ -31,37 +34,60 @@ class _WebViewDemoState extends State<WebViewDemo> {
       appBar: AppBar(
         title: const Text('WebView Demo'),
       ),
-      body: Column(
-        children: [
-          if (htmlData != null)
-            SizedBox(
-              width: 300,
-              height: 200,
-              child: InAppWebView(
-                initialData: InAppWebViewInitialData(data: htmlData!),
-                initialSettings: InAppWebViewSettings(
-                  javaScriptEnabled: true,
-                  transparentBackground: true,
-                ),
-                onLoadStop: (controller, url) async {
-                  if (imageData == null) {
-                    Future.delayed(const Duration(milliseconds: 100), () async {
-                      imageData = await controller.takeScreenshot();
-                      setState(() {});
-                    });
-                  }
-                },
-              ),
-            ),
-          const SizedBox(height: 20),
-          if (imageData != null)
-            Image.memory(
-              imageData!,
-              width: 300,
-              height: 200,
-            ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(imageData != null
+                ? '3. Image loaded'
+                : (htmlData != null ? '2. WebView loaded' : '1. Loading...')),
+            const SizedBox(height: 20),
+            imageData != null
+                ? _buildImage()
+                : (htmlData != null ? _buildWebView() : _buildPlaceholder())
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return const SizedBox(
+      width: 300,
+      height: 200,
+    );
+  }
+
+  Widget _buildWebView() {
+    return Opacity(
+      opacity: 0.1,
+      child: SizedBox(
+        width: 300,
+        height: 200,
+        child: InAppWebView(
+          initialData: InAppWebViewInitialData(data: htmlData!),
+          initialSettings: InAppWebViewSettings(
+            javaScriptEnabled: true,
+            transparentBackground: true,
+          ),
+          onLoadStop: (controller, url) async {
+            if (imageData == null) {
+              Future.delayed(const Duration(milliseconds: 1000), () async {
+                imageData = await controller.takeScreenshot();
+                setState(() {});
+              });
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImage() {
+    return Image.memory(
+      imageData!,
+      width: 300,
+      height: 200,
     );
   }
 }

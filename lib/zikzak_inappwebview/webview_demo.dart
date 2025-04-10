@@ -62,6 +62,9 @@ class _WebViewDemoState extends State<WebViewDemo> {
             });
           }
         },
+        onConsoleMessage: (controller, consoleMessage) {
+          print('onConsoleMessage: ${consoleMessage.message}');
+        },
       ),
     );
   }

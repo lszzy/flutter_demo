@@ -107,6 +107,9 @@ class _WebViewImageDemoState extends State<WebViewImageDemo> {
               });
             }
           },
+          onConsoleMessage: (controller, consoleMessage) {
+            print('onConsoleMessage: ${consoleMessage.message}');
+          },
         ),
       ),
     );

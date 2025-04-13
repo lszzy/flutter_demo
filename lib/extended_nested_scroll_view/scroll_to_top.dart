@@ -23,7 +23,9 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
     outerController.addListener(() {
       print("outer: " + outerController.offset.toString());
       if (!canScroll && innerController!.offset <= 0) {
-        outerController.jumpTo(200);
+        if (outerController.offset != 200) {
+          outerController.jumpTo(200);
+        }
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
@@ -31,7 +33,9 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
       innerController?.addListener(() {
         print("inner: " + innerController!.offset.toString());
         if (!canScroll && innerController!.offset <= 0) {
-          outerController.jumpTo(200);
+          if (outerController.offset != 200) {
+            outerController.jumpTo(200);
+          }
         }
       });
     });
@@ -43,10 +47,6 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
     super.dispose();
   }
 
-  void innerControllerChanged() {}
-
-  void outerControllerChanged() {}
-
   bool canScroll = true;
 
   @override
@@ -55,14 +55,19 @@ class _ScrollToTopDemoState extends State<ScrollToTopDemo>
       body: NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification notification) {
           if (notification is ScrollStartNotification) {
-            canScroll = true;
-            if (notification.dragDetails != null) {
-              print("ScrollStartNotification");
-              canScroll = innerController!.position.pixels <= 0;
+            if (notification.depth > 0) {
+              canScroll = true;
+              if (notification.dragDetails != null) {
+                canScroll = innerController!.position.pixels <= 0;
+              }
+              print(
+                  "ScrollStartNotification inner: ${innerController!.position.pixels} canScroll: " +
+                      canScroll.toString());
             }
-            print("canScroll: " + canScroll.toString());
           } else if (notification is ScrollEndNotification) {
-            print("ScrollEndNotification");
+            if (notification.depth > 0) {
+              print("ScrollEndNotification");
+            }
           }
           return false;
         },

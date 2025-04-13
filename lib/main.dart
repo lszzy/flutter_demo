@@ -6,6 +6,7 @@ import 'package:flutter_demo/extended_nested_scroll_view/load_more.dart';
 import 'package:flutter_demo/extended_nested_scroll_view/pull_to_refresh.dart';
 import 'package:flutter_demo/extended_nested_scroll_view/pull_to_refresh_outer.dart';
 import 'package:flutter_demo/extended_nested_scroll_view/scroll_to_top.dart';
+import 'package:flutter_demo/extended_nested_scroll_view/scroll_to_top_nested.dart';
 import 'package:flutter_demo/flutter_scrollview_observer/nested_scrollview_demo_page.dart';
 import 'package:flutter_demo/zikzak_inappwebview/webview_demo.dart';
 import 'package:flutter_demo/zikzak_inappwebview/webview_image_demo.dart';
@@ -142,6 +143,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 }));
               },
               child: const Text('ScrollToTopDemo'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ScrollToTopNestedDemo();
+                }));
+              },
+              child: const Text('ScrollToTopNestedDemo'),
             ),
             ElevatedButton(
               onPressed: () {

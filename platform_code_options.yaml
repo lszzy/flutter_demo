@@ -1,0 +1,22 @@
+platform_types:
+  - google
+  - huawei
+  - other
+  - iphone
+  - debug
+
+union_types:
+  android:
+    - google
+    - huawei
+    - other
+
+  ios:
+    - iphone
+    - debug
+
+  mobile:
+    - android
+    - ios
+
+current_platform: debug

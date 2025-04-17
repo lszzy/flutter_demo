@@ -45,7 +45,7 @@ class CodeRange {
   bool contains(CodeRange other) => offset <= other.offset && end >= other.end;
 }
 
-class PlatformGenerator extends GeneratorForAnnotation<PlatformDetector> {
+class PlatformGenerator extends GeneratorForAnnotation<PlatformAvailable> {
   final int platformTypeMaskCode;
   final List<Edge> allImports;
 
@@ -112,15 +112,15 @@ class _Visitor extends RecursiveAstVisitor<void> {
   _handleNode(AnnotatedNode node, {HandleRename? handleRename}) {
     if (node.metadata.isNotEmpty) {
       var annotation = node.metadata
-          .singleWhereOrNull((element) => element.name.name == 'PlatformSpec');
+          .singleWhereOrNull((element) => element.name.name == 'Available');
       if (annotation != null && annotation.arguments != null) {
         var _platformType = annotation.arguments!.arguments.firstWhere((arg) =>
             arg is NamedExpression &&
-            arg.name.label.toString() == 'platformType');
+            arg.name.label.toString() == 'platform');
         var _renameTo = annotation.arguments!.arguments.firstWhereOrNull(
             (arg) =>
                 arg is NamedExpression &&
-                arg.name.label.toString() == 'renameTo');
+                arg.name.label.toString() == 'rename');
         var _not = annotation.arguments!.arguments.firstWhereOrNull((arg) =>
             arg is NamedExpression && arg.name.label.toString() == 'not');
         var isNot = _not == null

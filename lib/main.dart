@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/platform/current_platform.p.dart';
-import 'package:flutter_demo/platform/platform_debug.p.dart';
+import 'package:flutter_demo/platform/platform_debug.dart';
 import 'package:flutter_demo/extended_nested_scroll_view/dou_yin_ping_lun.dart';
 import 'package:flutter_demo/extended_nested_scroll_view/dynamic_pinned_header_height.dart';
 import 'package:flutter_demo/extended_nested_scroll_view/extened_nested_scroll_view_demo.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_demo/extended_nested_scroll_view/scroll_to_top_extended_
 import 'package:flutter_demo/flutter_scrollview_observer/nested_scrollview_demo_page.dart';
 import 'package:flutter_demo/zikzak_inappwebview/webview_demo.dart';
 import 'package:flutter_demo/zikzak_inappwebview/webview_image_demo.dart';
+import 'package:platform_code_builder/platform_code_builder.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,6 +47,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    String platformName = PlatformType.getName(PlatformType.current);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -57,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text('Current platform: $currentPlatform'),
+              Text('Current platform: $platformName'),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {

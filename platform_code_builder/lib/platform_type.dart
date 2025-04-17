@@ -1,4 +1,6 @@
 class PlatformType {
+  static const current = debug;
+
   static const google = 1;
 
   static const huawei = 2;
@@ -15,7 +17,8 @@ class PlatformType {
 
   static const all = 31;
 
-  static int fromName(String name) => {
+  static int fromName(String name) =>
+      {
         'google': google,
         'huawei': huawei,
         'other': other,
@@ -24,5 +27,19 @@ class PlatformType {
         'android': android,
         'ios': ios,
         'all': all
-      }[name]!;
+      }[name] ??
+      debug;
+
+  static String getName(int type) =>
+      {
+        google: 'google',
+        huawei: 'huawei',
+        other: 'other',
+        iphone: 'iphone',
+        debug: 'debug',
+        android: 'android',
+        ios: 'ios',
+        all: 'all'
+      }[type] ??
+      'debug';
 }

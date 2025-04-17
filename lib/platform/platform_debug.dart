@@ -1,18 +1,20 @@
-@PlatformDetector()
-@PlatformSpec(platformType: PlatformType.debug, code: '''
+@PlatformAvailable()
+@Available(platform: PlatformType.debug, code: '''
 import 'package:fwdebug_flutter/fwdebug_flutter.dart';
 ''')
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 import 'package:platform_code_builder/platform_code_builder.dart';
 
-@PlatformSpec(platformType: PlatformType.all, renameTo: 'PlatformDebug')
+export 'platform_debug.p.dart';
+
+@Available(platform: PlatformType.all, rename: 'PlatformDebug')
 class _PlatformDebug {
-  @PlatformSpec(platformType: PlatformType.debug, not: true)
+  @Available(platform: PlatformType.debug, not: true)
   static TransitionBuilder? materialBuilder;
 
-  @PlatformSpec(platformType: PlatformType.debug, renameTo: 'materialBuilder', code: '''
+  @Available(platform: PlatformType.debug, rename: 'materialBuilder', code: '''
   static TransitionBuilder? materialBuilder = (context, child) {
     return FwdebugFlutter.inspector(child: child!);
   };

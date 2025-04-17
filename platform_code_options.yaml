@@ -15,7 +15,7 @@ union_types:
     - iphone
     - debug
 
-  mobile:
+  all:
     - android
     - ios
 

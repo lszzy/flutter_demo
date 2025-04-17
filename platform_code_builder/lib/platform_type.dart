@@ -13,7 +13,7 @@ class PlatformType {
 
   static const ios = 24;
 
-  static const mobile = 31;
+  static const all = 31;
 
   static int fromName(String name) => {
         'google': google,
@@ -23,6 +23,6 @@ class PlatformType {
         'debug': debug,
         'android': android,
         'ios': ios,
-        'mobile': mobile
+        'all': all
       }[name]!;
 }

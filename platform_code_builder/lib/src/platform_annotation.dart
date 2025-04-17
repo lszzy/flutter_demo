@@ -5,12 +5,22 @@ class PlatformAvailable {
 class Available {
   final int platform;
   final String? rename;
-  final bool not;
   final String? code;
 
   const Available({
     required this.platform,
-    this.not = false,
+    this.rename,
+    this.code,
+  });
+}
+
+class Unavailable {
+  final int platform;
+  final String? rename;
+  final String? code;
+
+  const Unavailable({
+    required this.platform,
     this.rename,
     this.code,
   });

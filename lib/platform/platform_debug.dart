@@ -11,7 +11,7 @@ export 'platform_debug.p.dart';
 
 @Available(platform: PlatformType.all, rename: 'PlatformDebug')
 class _PlatformDebug {
-  @Available(platform: PlatformType.debug, not: true)
+  @Unavailable(platform: PlatformType.debug)
   static TransitionBuilder? materialBuilder;
 
   @Available(platform: PlatformType.debug, rename: 'materialBuilder', code: '''

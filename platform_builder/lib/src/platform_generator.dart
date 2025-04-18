@@ -136,6 +136,9 @@ class _Visitor extends RecursiveAstVisitor<void> {
               _renames[CodeRange.formEntry(nameNode)] =
                   _rename.substring(1, _rename.length - 1);
             }
+            _removes.add(CodeRange.formEntry(annotation));
+          } else {
+            _removes.add(CodeRange.formEntry(annotation));
           }
         } else {
           _removes.add(CodeRange.formEntry(node));

@@ -109,38 +109,54 @@ class _Visitor extends RecursiveAstVisitor<void> {
 
   _handleNode(AnnotatedNode node, {HandleRename? handleRename}) {
     if (node.metadata.isNotEmpty) {
-      var builderAnnotation = node.metadata.singleWhereOrNull(
+      final builderAnnotation = node.metadata.singleWhereOrNull(
           (element) => 'PlatformBuilder' == element.name.name);
       if (builderAnnotation != null) {
-        _removes.add(CodeRange.formEntry(builderAnnotation));
+        final importArg = builderAnnotation.arguments?.arguments
+            .firstWhereOrNull((arg) =>
+                arg is NamedExpression &&
+                arg.name.label.toString() == 'import');
+        final import = importArg == null
+            ? true
+            : ((importArg as NamedExpression).expression as BooleanLiteral)
+                .value;
+
+        if (import) {
+          _removes.add(CodeRange.formEntry(builderAnnotation));
+        } else {
+          _removes.add(CodeRange.formEntry(node));
+        }
       }
 
-      var annotation = node.metadata.singleWhereOrNull((element) =>
+      final annotation = node.metadata.singleWhereOrNull((element) =>
           ['Available', 'Unavailable'].contains(element.name.name));
       if (annotation != null && annotation.arguments != null) {
-        var platform = annotation.arguments!.arguments.firstWhere((arg) =>
+        final platformArg = annotation.arguments!.arguments.firstWhere((arg) =>
             arg is NamedExpression && arg.name.label.toString() == 'platform');
-        var rename = annotation.arguments!.arguments.firstWhereOrNull((arg) =>
-            arg is NamedExpression && arg.name.label.toString() == 'rename');
-        var isNot = annotation.name.name == 'Unavailable';
-        var code = annotation.arguments!.arguments.firstWhereOrNull((arg) =>
-            arg is NamedExpression && arg.name.label.toString() == 'code');
+        final renameArg = annotation.arguments!.arguments.firstWhereOrNull(
+            (arg) =>
+                arg is NamedExpression &&
+                arg.name.label.toString() == 'rename');
+        final isUnavailable = annotation.name.name == 'Unavailable';
+        final codeArg = annotation.arguments!.arguments.firstWhereOrNull(
+            (arg) =>
+                arg is NamedExpression && arg.name.label.toString() == 'code');
 
         if (platformTypeMaskCode.binaryMatch(parsePlatformTypeExpression(
-                (platform as dynamic).expression.toString())) !=
-            isNot) {
-          if (code != null) {
-            var _code = (code as NamedExpression).expression.toString();
-            _code = _code
+                (platformArg as dynamic).expression.toString())) !=
+            isUnavailable) {
+          if (codeArg != null) {
+            var code = (codeArg as NamedExpression).expression.toString();
+            code = code
                 .trim()
                 .replaceAll(RegExp('^[\'\"]+|[\'\"]+\$', multiLine: true), '');
-            _renames[CodeRange.formEntry(node)] = _code.trim();
-          } else if (rename != null) {
-            var _rename = (rename as NamedExpression).expression.toString();
-            var nameNode = handleRename?.call();
+            _renames[CodeRange.formEntry(node)] = code.trim();
+          } else if (renameArg != null) {
+            final rename = (renameArg as NamedExpression).expression.toString();
+            final nameNode = handleRename?.call();
             if (nameNode != null) {
               _renames[CodeRange.formEntry(nameNode)] =
-                  _rename.substring(1, _rename.length - 1);
+                  rename.substring(1, rename.length - 1);
             }
             _removes.add(CodeRange.formEntry(annotation));
           } else {

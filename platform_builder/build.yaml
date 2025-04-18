@@ -1,9 +1,9 @@
 builders:
   platform_builder:
-    import: 'package:platform_code_builder/src/platform_builder.dart'
+    import: 'package:platform_builder/src/platform_builder.dart'
     builder_factories:
       - platformBuilder
-    build_extensions: { '.dart': [ '.p.dart' ] }
+    build_extensions: { '.dart': [ '.platform.dart' ] }
     auto_apply: dependents
     build_to: source
     defaults:

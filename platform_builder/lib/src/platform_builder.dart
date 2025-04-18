@@ -5,14 +5,15 @@ import 'package:chalkdart/chalk.dart';
 import 'package:code_builder/code_builder.dart' hide LibraryBuilder;
 import 'package:dart_style/dart_style.dart';
 import 'package:lakos/lakos.dart';
-import 'package:platform_code_builder/platform_type.dart';
+import 'package:platform_builder/platform_type.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
 import 'platform_generator.dart';
 
 Builder platformBuilder(BuilderOptions options) {
-  var yaml = loadYaml(File('./platform_options.yaml').readAsStringSync());
+  var yaml =
+      loadYaml(File('./platform_builder/platform.yaml').readAsStringSync());
   var selectedPlatform = buildTypes(options, yaml);
   var platformMaskCode = PlatformType.fromName(selectedPlatform);
   if (platformMaskCode.toRadixString(2).replaceAll('0', '').length != 1) {
@@ -41,10 +42,11 @@ Builder platformBuilder(BuilderOptions options) {
 
   var sources = Directory('./lib').listSync(recursive: true);
   var platformSources =
-      sources.where((source) => source.path.endsWith('.p.dart'));
+      sources.where((source) => source.path.endsWith('.platform.dart'));
   for (var platformSource in platformSources) {
     if (sources.any((source) =>
-        source.path == platformSource.path.replaceFirst('.p.dart', '.dart'))) {
+        source.path ==
+        platformSource.path.replaceFirst('.platform.dart', '.dart'))) {
       platformSource.deleteSync();
     }
   }
@@ -54,7 +56,7 @@ Builder platformBuilder(BuilderOptions options) {
       platformMaskCode,
       buildModel(Directory('./lib'), showTree: false).edges,
     ),
-    generatedExtension: '.p.dart',
+    generatedExtension: '.platform.dart',
     header: '$defaultFileHeader\n// current platform is [$selectedPlatform]',
     formatOutput: (code) => DartFormatter(fixes: StyleFix.all).format(code),
   );
@@ -135,12 +137,12 @@ String buildTypes(BuilderOptions options, dynamic yaml) {
   );
   var platformTypeSourceCode =
       DartFormatter().format('${platformTypeClass.accept(DartEmitter())}');
-  var file = File('./platform_code_builder/lib/platform_type.dart');
+  var file = File('./platform_builder/lib/platform_type.dart');
   var platformTypeContent = file.readAsStringSync();
   if (platformTypeContent != platformTypeSourceCode) {
     file.writeAsStringSync(platformTypeSourceCode);
     stderr.writeln(
-        '${chalk.yellow('[WARNING]')} [platform_code_builder/lib/platform_type.dart] generated!');
+        '${chalk.yellow('[WARNING]')} [platform_builder/lib/platform_type.dart] generated!');
     stderr.writeln(
         '${chalk.yellow('[WARNING]')} Please run the build runner again!');
     exit(1);

@@ -8,9 +8,7 @@
 import 'package:fwdebug_flutter/fwdebug_flutter.dart';
 
 import 'package:flutter/material.dart';
-import 'package:platform_code_builder/platform_code_builder.dart';
-
-export 'platform_debug.p.dart';
+import 'package:platform_builder/platform_builder.dart';
 
 @Available(platform: PlatformType.all, rename: 'PlatformDebug')
 class PlatformDebug {

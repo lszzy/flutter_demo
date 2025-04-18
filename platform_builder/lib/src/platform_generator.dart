@@ -8,14 +8,12 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/ast/syntactic_entity.dart';
 import 'package:analyzer/dart/ast/token.dart';
 import 'package:_fe_analyzer_shared/src/scanner/token.dart' show StringToken;
-
-// ignore: implementation_imports
 import 'package:analyzer/src/source/source_resource.dart' show FileSource;
 import 'package:build/build.dart';
 import 'package:chalkdart/chalk.dart';
 import 'package:collection/collection.dart';
 import 'package:lakos/lakos.dart';
-import 'package:platform_code_builder/platform_type.dart';
+import 'package:platform_builder/platform_type.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'platform_annotation.dart';
@@ -45,7 +43,7 @@ class CodeRange {
   bool contains(CodeRange other) => offset <= other.offset && end >= other.end;
 }
 
-class PlatformGenerator extends GeneratorForAnnotation<PlatformAvailable> {
+class PlatformGenerator extends GeneratorForAnnotation<PlatformBuilder> {
   final int platformTypeMaskCode;
   final List<Edge> allImports;
 
@@ -66,7 +64,7 @@ class PlatformGenerator extends GeneratorForAnnotation<PlatformAvailable> {
       List<String> exceptions = [''];
       hasImport.forEach((ele) {
         exceptions.add(
-            '${chalk.yellow('[WARNING]')} Do not import [lib${ele.to}] directly in [lib${ele.from}], use [lib${ele.to.replaceFirst('.dart', '.p.dart')}] instead!');
+            '${chalk.yellow('[WARNING]')} Do not import [lib${ele.to}] directly in [lib${ele.from}], use [lib${ele.to.replaceFirst('.dart', '.platform.dart')}] instead!');
       });
       stderr.writeln(exceptions.join('\n'));
     }

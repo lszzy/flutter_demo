@@ -47,8 +47,8 @@ dependencies:
   # Platform code builder
   pubspec_manager: ^1.0.1
   chalkdart: any
-  platform_code_builder:
-    path: platform_code_builder
+  platform_builder:
+    path: platform_builder
 
 dev_dependencies:
   flutter_test:

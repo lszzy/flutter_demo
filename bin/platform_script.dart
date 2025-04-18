@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chalkdart/chalk.dart';
-import 'package:platform_code_builder/platform_type.dart';
+import 'package:platform_builder/platform_type.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
 main(List<String> args) {

@@ -1,5 +1,5 @@
-name: platform_code_builder
-description: platform code builder.
+name: platform_builder
+description: platform builder.
 publish_to: 'none'
 
 version: 1.0.0+1

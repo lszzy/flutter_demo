@@ -2,7 +2,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:build_runner_core/build_runner_core.dart' as _i1;
 import 'package:source_gen/builder.dart' as _i2;
-import 'package:platform_code_builder/src/platform_builder.dart' as _i3;
+import 'package:platform_builder/src/platform_builder.dart' as _i3;
 import 'package:build_config/build_config.dart' as _i4;
 import 'package:build_resolvers/builder.dart' as _i5;
 import 'dart:isolate' as _i6;
@@ -18,9 +18,9 @@ final _builders = <_i1.BuilderApplication>[
     appliesBuilders: const [r'source_gen:part_cleanup'],
   ),
   _i1.apply(
-    r'platform_code_builder:platform_builder',
+    r'platform_builder:platform_builder',
     [_i3.platformBuilder],
-    _i1.toDependentsOf(r'platform_code_builder'),
+    _i1.toDependentsOf(r'platform_builder'),
     hideOutput: false,
     defaultGenerateFor: const _i4.InputSet(include: [
       r'lib/**',

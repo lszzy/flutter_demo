@@ -109,6 +109,12 @@ class _Visitor extends RecursiveAstVisitor<void> {
 
   _handleNode(AnnotatedNode node, {HandleRename? handleRename}) {
     if (node.metadata.isNotEmpty) {
+      var builderAnnotation = node.metadata.singleWhereOrNull(
+          (element) => 'PlatformBuilder' == element.name.name);
+      if (builderAnnotation != null) {
+        _removes.add(CodeRange.formEntry(builderAnnotation));
+      }
+
       var annotation = node.metadata.singleWhereOrNull((element) =>
           ['Available', 'Unavailable'].contains(element.name.name));
       if (annotation != null && annotation.arguments != null) {
